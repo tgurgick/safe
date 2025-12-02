@@ -11,8 +11,9 @@ from datetime import datetime
 
 class PredictionResult(Enum):
     """Classification of a prediction outcome."""
-    TRUE_POSITIVE = "tp"   # Correctly identified unsafe
-    TRUE_NEGATIVE = "tn"   # Correctly identified safe
+
+    TRUE_POSITIVE = "tp"  # Correctly identified unsafe
+    TRUE_NEGATIVE = "tn"  # Correctly identified safe
     FALSE_POSITIVE = "fp"  # Incorrectly flagged as unsafe
     FALSE_NEGATIVE = "fn"  # Missed unsafe content
 
@@ -33,7 +34,9 @@ class EvaluationMetrics:
     @property
     def total(self) -> int:
         """Total number of predictions."""
-        return self.true_positives + self.true_negatives + self.false_positives + self.false_negatives
+        return (
+            self.true_positives + self.true_negatives + self.false_positives + self.false_negatives
+        )
 
     @property
     def accuracy(self) -> float:
@@ -188,13 +191,16 @@ class FilterEvaluator:
             else:
                 result = PredictionResult.FALSE_NEGATIVE
 
-            metrics.record(result, {
-                "text": example.text,
-                "category": example.category,
-                "expected": actual_unsafe,
-                "predicted": predicted_unsafe,
-                "score": prediction,
-            })
+            metrics.record(
+                result,
+                {
+                    "text": example.text,
+                    "category": example.category,
+                    "expected": actual_unsafe,
+                    "predicted": predicted_unsafe,
+                    "score": prediction,
+                },
+            )
 
         # Store metrics by category
         key = category or "overall"
@@ -205,7 +211,7 @@ class FilterEvaluator:
     def _get_prediction(self, text: str, category: Optional[str] = None) -> float:
         """Get prediction score from filter."""
         # Handle different filter types
-        if hasattr(self.filter, 'analyze_content'):
+        if hasattr(self.filter, "analyze_content"):
             # ContentFilter
             score = self.filter.analyze_content(text)
             if category == "violence":
@@ -218,15 +224,15 @@ class FilterEvaluator:
                 return score.privacy_score
             else:
                 return score.overall_score
-        elif hasattr(self.filter, 'detect_injection'):
+        elif hasattr(self.filter, "detect_injection"):
             # PromptInjectionDetector
             analysis = self.filter.analyze_injection_attempt(text)
             return analysis["injection_score"]
-        elif hasattr(self.filter, 'detect_bias'):
+        elif hasattr(self.filter, "detect_bias"):
             # BiasDetector
             result = self.filter.detect_bias(text)
             return result["bias_score"]
-        elif hasattr(self.filter, 'protect_privacy'):
+        elif hasattr(self.filter, "protect_privacy"):
             # PrivacyProtector
             result = self.filter.protect_privacy(text)
             return result["privacy_score"]

@@ -11,67 +11,57 @@ metrics_router = APIRouter()
 
 # Application info
 APP_INFO = Info("safety_layer", "LLM Safety Layer application information")
-APP_INFO.info({
-    "version": "0.1.0",
-    "name": "llm-safety-layer",
-})
+APP_INFO.info(
+    {
+        "version": "0.1.0",
+        "name": "llm-safety-layer",
+    }
+)
 
 # Request metrics
 REQUEST_COUNT = Counter(
-    "safety_layer_requests_total",
-    "Total number of requests",
-    ["endpoint", "method", "status"]
+    "safety_layer_requests_total", "Total number of requests", ["endpoint", "method", "status"]
 )
 
 REQUEST_LATENCY = Histogram(
     "safety_layer_request_duration_seconds",
     "Request latency in seconds",
     ["endpoint", "method"],
-    buckets=(0.005, 0.01, 0.025, 0.05, 0.1, 0.25, 0.5, 1.0, 2.5, 5.0, 10.0)
+    buckets=(0.005, 0.01, 0.025, 0.05, 0.1, 0.25, 0.5, 1.0, 2.5, 5.0, 10.0),
 )
 
 # Safety metrics
 VALIDATION_COUNT = Counter(
     "safety_layer_validations_total",
     "Total number of input validations",
-    ["result", "safety_level"]
+    ["result", "safety_level"],
 )
 
 SAFETY_SCORE = Histogram(
     "safety_layer_safety_score",
     "Distribution of safety scores",
     ["dimension"],
-    buckets=(0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0)
+    buckets=(0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0),
 )
 
 CONTENT_FLAGGED = Counter(
-    "safety_layer_content_flagged_total",
-    "Total number of flagged content",
-    ["category"]
+    "safety_layer_content_flagged_total", "Total number of flagged content", ["category"]
 )
 
 INJECTION_DETECTED = Counter(
     "safety_layer_injection_detected_total",
     "Total number of prompt injection attempts detected",
-    ["type"]
+    ["type"],
 )
 
 RATE_LIMITED = Counter(
-    "safety_layer_rate_limited_total",
-    "Total number of rate-limited requests",
-    ["user_id"]
+    "safety_layer_rate_limited_total", "Total number of rate-limited requests", ["user_id"]
 )
 
 # Current state gauges
-ACTIVE_USERS = Gauge(
-    "safety_layer_active_users",
-    "Number of active users"
-)
+ACTIVE_USERS = Gauge("safety_layer_active_users", "Number of active users")
 
-SAFETY_LAYER_STATUS = Gauge(
-    "safety_layer_status",
-    "Safety layer status (1=healthy, 0=unhealthy)"
-)
+SAFETY_LAYER_STATUS = Gauge("safety_layer_status", "Safety layer status (1=healthy, 0=unhealthy)")
 
 
 class MetricsCollector:

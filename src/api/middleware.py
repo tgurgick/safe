@@ -23,9 +23,7 @@ class RequestLoggingMiddleware(BaseHTTPMiddleware):
         start_time = time.time()
 
         # Log request
-        logger.info(
-            f"[{request_id}] {request.method} {request.url.path} - Started"
-        )
+        logger.info(f"[{request_id}] {request.method} {request.url.path} - Started")
 
         # Process request
         response = await call_next(request)

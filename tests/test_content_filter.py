@@ -148,7 +148,10 @@ class TestContentFilter:
         assert "safe" in safe_score.reasoning.lower()
 
         unsafe_score = filter.analyze_content("Kill murder bomb attack destroy")
-        assert "violent" in unsafe_score.reasoning.lower() or "flagged" in unsafe_score.reasoning.lower()
+        assert (
+            "violent" in unsafe_score.reasoning.lower()
+            or "flagged" in unsafe_score.reasoning.lower()
+        )
 
     def test_confidence_calculation(self, default_config):
         """Test confidence score calculation."""

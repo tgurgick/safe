@@ -154,9 +154,7 @@ class TestPrivacyProtector:
         """Test severity level assignment."""
         protector = PrivacyProtector(default_config)
 
-        result = protector.protect_privacy(
-            "SSN: 123-45-6789 Phone: 555-123-4567"
-        )
+        result = protector.protect_privacy("SSN: 123-45-6789 Phone: 555-123-4567")
 
         # SSN should be high severity
         ssn_violations = [v for v in result["pii_violations"] if v["type"] == "ssn"]
@@ -194,9 +192,7 @@ class TestPrivacyProtector:
         """Test recommendations generation."""
         protector = PrivacyProtector(default_config)
 
-        result = protector.protect_privacy(
-            "SSN: 123-45-6789 password secret confidential"
-        )
+        result = protector.protect_privacy("SSN: 123-45-6789 password secret confidential")
 
         assert len(result["recommendations"]) > 0
 

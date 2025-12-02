@@ -101,7 +101,7 @@ def run_feedback_session():
             filter_category=category,
         )
 
-        print(f"\nText: \"{text}\"")
+        print(f'\nText: "{text}"')
         print(f"Category: {category}")
         print(f"Filter score: {filter_score:.2f}")
         print(f"Prediction: {'UNSAFE' if predicted_unsafe else 'SAFE'}")
@@ -120,7 +120,7 @@ def run_feedback_session():
             if response == "fp":
                 correct_label = False  # Was marked unsafe but is actually safe
             elif response == "fn":
-                correct_label = True   # Was marked safe but is actually unsafe
+                correct_label = True  # Was marked safe but is actually unsafe
 
             session.submit_feedback(
                 item_id=item.id,

@@ -51,7 +51,11 @@ def _safety_score_to_response(score) -> SafetyScoreResponse:
         factual_score=score.factual_score,
         overall_score=score.overall_score,
         confidence=score.confidence,
-        safety_level=score.safety_level.value if hasattr(score.safety_level, 'value') else str(score.safety_level),
+        safety_level=(
+            score.safety_level.value
+            if hasattr(score.safety_level, "value")
+            else str(score.safety_level)
+        ),
         flagged_keywords=score.flagged_keywords,
         reasoning=score.reasoning,
     )
@@ -161,18 +165,18 @@ async def process_interaction(
         input_score = None
         output_score = None
 
-        if result.get('input_validation'):
-            input_score = _safety_score_to_response(result['input_validation'].safety_score)
+        if result.get("input_validation"):
+            input_score = _safety_score_to_response(result["input_validation"].safety_score)
 
-        if result.get('output_report'):
-            output_score = _safety_score_to_response(result['output_report'].safety_score)
+        if result.get("output_report"):
+            output_score = _safety_score_to_response(result["output_report"].safety_score)
 
         return ProcessResponse(
-            input_valid=result.get('input_valid', False),
-            input_safe=result.get('input_safe', False),
-            output_safe=result.get('output_safe', False),
-            should_proceed=result.get('should_proceed', False),
-            error_message=result.get('error_message'),
+            input_valid=result.get("input_valid", False),
+            input_safe=result.get("input_safe", False),
+            output_safe=result.get("output_safe", False),
+            should_proceed=result.get("should_proceed", False),
+            error_message=result.get("error_message"),
             input_safety_score=input_score,
             output_safety_score=output_score,
         )
@@ -203,10 +207,10 @@ async def get_stats(
         stats = safety_layer.get_safety_stats()
 
         return StatsResponse(
-            content_filter_stats=stats.get('content_filter_stats', {}),
-            prompt_injection_stats=stats.get('prompt_injection_stats', {}),
-            rate_limiter_stats=stats.get('rate_limiter_stats', {}),
-            config=stats.get('config', {}),
+            content_filter_stats=stats.get("content_filter_stats", {}),
+            prompt_injection_stats=stats.get("prompt_injection_stats", {}),
+            rate_limiter_stats=stats.get("rate_limiter_stats", {}),
+            config=stats.get("config", {}),
         )
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))

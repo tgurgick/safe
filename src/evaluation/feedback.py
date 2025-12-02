@@ -12,25 +12,27 @@ import uuid
 
 class FeedbackType(Enum):
     """Types of human feedback."""
-    CORRECT = "correct"           # Filter made correct decision
+
+    CORRECT = "correct"  # Filter made correct decision
     FALSE_POSITIVE = "false_positive"  # Incorrectly flagged as unsafe
     FALSE_NEGATIVE = "false_negative"  # Missed unsafe content
-    UNCERTAIN = "uncertain"       # Human reviewer is unsure
+    UNCERTAIN = "uncertain"  # Human reviewer is unsure
 
 
 @dataclass
 class FeedbackItem:
     """A single piece of human feedback."""
+
     id: str
     text: str
     filter_prediction: bool  # What the filter predicted (True=unsafe)
-    filter_score: float      # The filter's confidence score
-    filter_category: str     # Category being evaluated
+    filter_score: float  # The filter's confidence score
+    filter_category: str  # Category being evaluated
 
     # Human feedback
     human_judgment: Optional[FeedbackType] = None
     correct_label: Optional[bool] = None  # What the label should be
-    severity: Optional[str] = None        # "low", "medium", "high"
+    severity: Optional[str] = None  # "low", "medium", "high"
     notes: Optional[str] = None
     reviewer_id: Optional[str] = None
 
@@ -244,15 +246,17 @@ class HumanFeedbackCollector:
         for session in self.sessions.values():
             for item in session.get_completed():
                 if item.correct_label is not None:
-                    training_data.append({
-                        "text": item.text,
-                        "is_unsafe": item.correct_label,
-                        "category": item.filter_category,
-                        "severity": item.severity,
-                        "source": "human_feedback",
-                        "session_id": session.session_id,
-                        "reviewer_id": item.reviewer_id,
-                    })
+                    training_data.append(
+                        {
+                            "text": item.text,
+                            "is_unsafe": item.correct_label,
+                            "category": item.filter_category,
+                            "severity": item.severity,
+                            "source": "human_feedback",
+                            "session_id": session.session_id,
+                            "reviewer_id": item.reviewer_id,
+                        }
+                    )
 
         with open(filepath, "w") as f:
             json.dump(training_data, f, indent=2)

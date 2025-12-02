@@ -123,9 +123,7 @@ class TestBiasDetector:
         assert not result["is_biased"]
 
         # Should have some bias score (threshold may vary)
-        result = detector.detect_bias(
-            "all everyone always never discriminate hate prejudice bias"
-        )
+        result = detector.detect_bias("all everyone always never discriminate hate prejudice bias")
         assert result["bias_score"] > 0.0  # Has bias indicators
 
     def test_confidence_calculation(self, default_config):
@@ -137,9 +135,7 @@ class TestBiasDetector:
         assert result["confidence"] <= 0.5
 
         # Bias detected should have some confidence
-        result = detector.detect_bias(
-            "all everyone completely totally discriminate hate prejudice"
-        )
+        result = detector.detect_bias("all everyone completely totally discriminate hate prejudice")
         assert result["confidence"] > 0.0  # Has some confidence
 
     def test_recommendations_generation(self, default_config):
@@ -147,9 +143,7 @@ class TestBiasDetector:
         detector = BiasDetector(default_config)
 
         # High bias content
-        result = detector.detect_bias(
-            "all everyone always hate discriminate prejudice"
-        )
+        result = detector.detect_bias("all everyone always hate discriminate prejudice")
         assert len(result["recommendations"]) > 0
 
         # Gender-specific recommendations
@@ -198,9 +192,7 @@ class TestBiasDetector:
         """Test detection of multiple bias types."""
         detector = BiasDetector(default_config)
 
-        result = detector.detect_bias(
-            "All young men always discriminate against old women"
-        )
+        result = detector.detect_bias("All young men always discriminate against old women")
 
         # Should detect multiple types
         flagged_types = set()
