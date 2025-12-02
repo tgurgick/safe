@@ -11,4 +11,4 @@ from .models.safety_score import SafetyScore
 from .models.safety_report import SafetyReport
 
 __version__ = "0.1.0"
-__all__ = ["SafetyLayer", "SafetyConfig", "SafetyScore", "SafetyReport"] 
+__all__ = ["SafetyLayer", "SafetyConfig", "SafetyScore", "SafetyReport"]
